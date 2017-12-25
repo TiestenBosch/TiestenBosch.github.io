@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 
+Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			Is HUDITO al kampioen? 
+		</title>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link href="css/css.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="https://s.pageclip.co/v1/pageclip.css" media="screen">
+		<script>
+		$(document).ready(function(){
+			$("#button1").click(function(){
+			$("#gif").slideToggle(700);
+			$("#check").slideToggle(700);
+			});
+		});
+		$(document).ready(function(){
+			$("#button2").click(function(){
+			$("#barchart").slideDown(700);
+			});
+		});
+		$(document).ready(function(){
+			$("#button3").click(function(){
+			$("#stand").slideDown(700);
+			});
+		});
+		</script>
+	</head>
+	<body>
+		<div id="container">
+			<div id = "kampioen">
+				<h2 style="margin-top:40px;">Is HUDITO heren 1 al zaalkampioen?</h2>
+				<button class="button" id="button1" onclick="checkkampioen()"><span>Let's see</span></button>
+				<p id = "check"></p>
+				<img id = "gif" src="Not-yet.gif" alt="Gifje" width= "90%" height= "345px" >
+			</div>
+			<div id = "topscorers">
+				<h2>Wie is er eigenlijk topscorer?</h2>
+				<button class="button" id="button2" onclick="data()"><span>Check de data</span></button>
+				<p>Blauw = Goals<br>Rood = Assist</p>
+				<p style="height: 600px; margin-left: 5px;" id = "barchart"></p>
+			</div>
+			<div id = "huidige-stand">
+				<h2>Hoe ziet de stand er uit?</h2>
+				<button class="button" id="button3" onclick="stand()"><span>Check de huidige stand</span></button>
+				<p style="font-size: 15px;" id = "stand"></p>
+			</div>
+		</div>
+		<script>
+		function checkkampioen(){
+			var text, 
+			src,
+			Hudito = 0,
+			Pij = 0,
+			Gro = 0,
+			Dor = 0,
+			For = 0,
+			HDS = 0,
+			DSHC = 0,
+			wedstrijden = 12;
+			//Ronde 1
+			Hudito = Hudito + 6;
+			Pij = Pij + 6;
+			Gro = Gro + 1;
+			Dor = Dor + 3;
+			For = For + 1;
+			HDS = HDS + 0;
+			DSHC = DSHC + 0;
+			wedstrijden = wedstrijden - 2;
+			//Ronde 2
+			Hudito = Hudito + 6;
+			Pij = Pij + 3;
+			Gro = Gro + 6;
+			Dor = Dor + 0;
+			For = For + 3;
+			HDS = HDS + 0;
+			DSHC = DSHC + 0;
+			wedstrijden = wedstrijden - 2;
+			if (Hudito>(Math.max(Pij, Gro, Dor, For, HDS, DSHC)+wedstrijden*3) == true) {
+				text = "Ja hoor, we zijn kampioen!!!";
+				src = "juichen.gif"
+			} else {
+				text = "Nee, nog niet :{";
+				src = "Not-yet.gif"
+			}
+			document.getElementById("check").innerHTML = text;
+		}
+		
+		function stand() {
+		var data = 
+		[
+			{"positie" : 1, "team" : "Hudito H1", "gespeeld" : 4, "gewonnen" : 4, "gelijk" : 0, "verloren" : 0, "goals-voor" : 23, "goals-tegen" : 5, "punten" : 12 },
+			{"positie" : 2, "team" : "Pijnacker H1", "gespeeld" : 4, "gewonnen" : 3, "gelijk" : 0, "verloren" : 1, "goals-voor" : 19, "goals-tegen" : 11, "punten" : 9 },
+			{"positie" : 3, "team" : "Groen-Geel H1", "gespeeld" : 4, "gewonnen" : 2, "gelijk" : 1, "verloren" : 1, "goals-voor" : 17, "goals-tegen" : 13, "punten" : 7 },
+			{"positie" : 4, "team" : "Forescate H1", "gespeeld" : 4, "gewonnen" : 1, "gelijk" : 1, "verloren" : 2, "goals-voor" : 11, "goals-tegen" : 15, "punten" : 4 },
+			{"positie" : 5, "team" : "Dordrecht H1", "gespeeld" : 4, "gewonnen" : 1, "gelijk" : 0, "verloren" : 3, "goals-voor" : 12, "goals-tegen" : 18, "punten" : 3 },
+			{"positie" : 6, "team" : "HDS H1", "gespeeld" : 2, "gewonnen" : 0, "gelijk" : 0, "verloren" : 2, "goals-voor" : 2, "goals-tegen" : 10, "punten" : 0 },
+			{"positie" : 7, "team" : "DSHC H1", "gespeeld" : 2, "gewonnen" : 0, "gelijk" : 0, "verloren" : 2, "goals-voor" : 3, "goals-tegen" : 15, "punten" : 0 },
+		]
+		
+		function tabulate(data, columns) {
+		var table = d3.select('#stand').append('table'),
+			thead = table.append('thead'),
+			tbody = table.append('tbody');
+
+		// append the header row
+		thead.append('tr')
+			.selectAll('th')
+			.data(columns).enter()
+			.append('th')
+				.text(function (column) { return column; });
+
+		// create a row for each object in the data
+		var rows = tbody.selectAll('tr')
+			.data(data)
+			.enter()
+			.append('tr');
+
+		// create a cell in each row for each column
+		var cells = rows.selectAll('td')
+			.data(function (row) {
+				return columns.map(function (column) {
+				return {column: column, value: row[column]};
+				});
+			})
+			.enter()
+				.append('td')
+					.text(function (d) { return d.value; });
+
+		return table;
+		}
+
+		// render the table(s)
+		tabulate(data, ["positie", "team", "gespeeld", "gewonnen", "gelijk", "verloren", "goals-voor", "goals-tegen", "punten"]); // 9 column table
+		
+		//document.getElementById("stand").innerHTML = text;
+		}
+		
+		function data() {
+		var namen = ["Kevin Ancher (K)", "Simon Bertels", "Bas Biesheuvel", "Ties ten Bosch", "Simon Engbers", "Quinten van Eys", "Maarten Husen", "Coen van Leeuwe", "Owen Mclaughlin", "Oscar Opstal", "Mathijs Stelwagen", "Pepijn Versteeg"],
+			goals = [0, 0, 0, 3, 0, 2, 3, 0, 3, 3, 1, 8]
+			assist = [0, 0, 2, 3, 0, 1, 2, 0, 3, 3, 2, 4]
+			goalsxassist = [0, 0, 0, 0, 0, 2, 3, 3, 0, 0, 2, 1, 3, 2, 0, 0, 3, 3, 3, 3, 1, 2, 8, 4]
+			legenda = ["goals","assist"]
+			width = 400
+			height = 520
+			x = 90
+			
+		var	merged = [],
+			i, l = Math.min(goals.length, assist.length);
+
+			for (i = 0; i < l; i++) {
+				merged.push(goals[i], assist[i]) ;}
+			merged.push(...goals.slice(l), ...assist.slice(l));
+			//console.log(merged);
+			
+		var widthScale = d3.scale.linear()
+			.domain([0, 8])
+			.range([x, width]);
+			
+		var axisScale = d3.scale.linear()
+			.domain([0, 8])
+			.range([x, width])
+			
+		var colorGoals = d3.scale.linear()
+			.domain([0, 8])
+			.range(["blue","blue"]);
+			
+		var colorAssist = d3.scale.linear()
+			.domain([0, 4])
+			.range(["crimson","firebrick"]);
+		
+		var axis = d3.svg.axis()
+			.scale(axisScale)
+	
+		var canvas = d3.select("#barchart")
+			.append("svg")
+			.attr("width", width + 3)
+			.attr("height", height)
+			.append("g");
+			
+		var bars = canvas.selectAll("rect")
+			.data(merged)
+			.enter()
+				.append("rect")
+				.attr("width", 0)
+				.attr("height", 18)
+				.attr("x", x)
+				.attr("y", function (d, i) {return i * 20 ;})
+				.attr("fill", function (d, i) {
+					if (i % 2 == 0) {
+						return colorGoals(d);
+					}
+					else {
+						return colorAssist(d);
+					} ;});
+				
+		bars.transition()
+			.duration(1000)
+			.attr("width", function (d) {return (widthScale(d - 2.3)) ;});
+			
+		var text = canvas.selectAll("text")
+			.data(namen)
+			.enter()
+				.append("text")
+				.attr("fill", "black")
+				.attr("font-size", 11)
+				.attr("y", function (d, i) {return i * 40 + 24; })
+				.text(function(d) {return d ;})
+				
+		canvas.append("g")
+			.call(axis)
+			.attr("transform","translate(0,480)");
+		
+		//document.getElementById("data").innerHTML = bars;
+		}
+		</script>
+		<script src="https://s.pageclip.co/v1/pageclip.js" charset="utf-8"></script>
+	</body>
+</html>
